@@ -1,0 +1,57 @@
+/*
+算24
+问题描述：给出4个小于10的正整数，你可以使用加减乘除4种运算以及括号把这4个数连接起来得到一个值为24的表达式 
+输入：数据包括多行，每行给出一组测试数据，最后一组包括4个0，表示输入结束。
+输入：可以得到输出“YSE”，反之输出“NO”
+思路：两个数先算，运算的结果与剩余的n-2个数构成了n-1个数求24的问题
+	枚举先算的两数，及其运算方式。边界条件，一个数算24
+	注意：浮点数比较是否相等，不能用== 
+*/ 
+#include <iostream>
+#include <cmath>
+using namespace std;
+double a[5];
+#define EPS 1e-6
+bool isZero(double x){
+	return fabs(x)<=EPS;
+} 
+bool count24(double a[],int n)
+{//用数组里的N个数计算24
+	if(n==1){
+		if(isZero(a[0]-24))
+			return true;
+		else
+			return false; 
+	} 
+	double b[5];
+	for(int i=0;i<n-1;i++)
+		for(int j=i+1;j<n;j++){
+			int m=0;//还剩下m个数，m=n-2
+			for(int k=0;k<n;++k)
+				if(k!=0;k<n;++k)
+				b[m++]=a[k];//把其余数放入b
+			b[m]=a[i]+a[j];
+			if(count24(b,m+1))
+				return true;
+			b[m]=a[i]-a[j];
+			if(count24(b,m+1))
+				return true;
+			b[m]=a[j]-a[i];
+			if(count24(b,m+1))
+				return true;
+			b[m]=a[i]*a[j];
+			if(count24(b,m+1))
+				return true;
+			if(!isZero(a[j])){
+				b[m]=a[i]/a[j];
+				if(count24(b,m+1))
+				return true;
+			}
+			if(!isZero(a[j])){
+				b[m]=a[j]/a[i];
+				if(count24(b,m+1))
+				return true;
+			}	 
+		}
+	return false;
+}
