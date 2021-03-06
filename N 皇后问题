@@ -1,0 +1,38 @@
+/*
+n皇后问题：输入整数n,要求n个国际象棋的皇后摆在n*n的棋盘上，互相不能攻击，输出全部方案
+		   两个皇后能相互攻击当且仅当它们在同一行，或者同一列，或者同一条对角线上。
+输入：一个正整数N,则程序求出N皇后问题的全部摆发
+输出： 输出结果里，每一行都代表一种摆法。行里的第i个数字如果是n,就代表第i行的皇后应该放在第n列。
+       皇后的行号，列号都是从1开始算。 
+*/
+#include <iostream>
+#inlcude <cmath>
+using namespace std;
+int N;
+int queenPos[100];
+//用来存放算好的皇后的位置。最左上角的是（0，0） 
+void NQueen (int k){//在0~k-1行的皇后已经摆好的情况下，摆第k行及其后的皇后 
+	int i;
+	if(k==N){// N 个皇后已经摆好
+		for(i=0;i<N;i++)
+ 			cout<<queenPos[i]+1<<" ";
+		cout<<endl;
+		return;	
+	}	
+	for(i=0;i<N;i++){//逐个尝试k个皇后的位置 
+		int j;
+		for(j=0;j<k;j++)//和已经摆好的k个皇后位置比较，看是否冲突 
+		{
+			if(queenPos[j]==i||abs(queenPos[j]-i)==abs(k-j)) break;//冲突，试下一个位置 
+		} 
+		if(j==k){//当前选的位置i不冲突 
+			queenPos[k]=i;//将第k个皇后摆放在第k行第i列 
+		}
+	} 
+}
+int main()
+{
+	cin>>N;
+	Nqueen(0);//从第0行开始摆皇后
+	return 0; 
+} 
