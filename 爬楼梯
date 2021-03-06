@@ -1,0 +1,27 @@
+/*
+爬楼梯: 爬楼梯，每次可以走1级或者2级，输入楼梯的阶数，求不同的走法数
+输入: 输入包括若干行，每行包含一个正整数N,代表楼梯级数，1<=N<=30
+输出：不同的走法数，每一行输入对应一行输出
+思路：n级台阶的走法=先走一级后，n-1级台阶的走法+先走两级，n-2级台阶的走法
+		f(n)=f(n-1)+f(n-2)
+	  边界： n<0, 0   n=0, 1 
+ 
+*/
+#include <iostream>
+using namespace std;
+int N;
+int stairs(int n)
+{
+	if(n<0)
+    	return 0;
+    if(n==0)
+    	return 1;
+    return stairs(n-1)+stairs(n-2);
+}
+int main()
+{
+	while(cin>>N){
+		cout<<stairs(N)<<endl; 
+	}
+	return 0;
+}
