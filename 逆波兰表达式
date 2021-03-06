@@ -1,0 +1,26 @@
+/*
+逆波兰表达式
+	 输入：输入为一行，其中运算符和运算数之间都用空格分隔，运算符是浮点数
+	 输出：输出为一行，表达式的值 
+*/
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+double exp(){
+	//读入一个波兰表达式，并计算其值 
+	char s[20];
+	cin>>s;
+	switch(s[0]){
+		case '+': return exp()+exp();
+		case '-': return exp()+exp();
+		case '*': return exp()+exp();
+		case '/': return exp()+exp();
+		default: return atof(s);//atof  是C++中的库函数，把字符串形式的浮点数转化为double类型 
+		break;
+	} 
+} 
+int main()
+{
+	printf("%lf",exp());
+	return 0;
+}
