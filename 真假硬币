@@ -1,0 +1,67 @@
+/*  @问题：有12枚硬币，11个真，1个假，不知道假币和真币谁重
+		用一架天平称三次，告诉你称的结果，请找出假币，并确定假币是轻是重 
+	@输入：1
+	       ABCD EFGH even
+	       ABCI EFJK up
+	       ABIJ EFGH even
+ 	@输出：k is the counterfeit cion and it is light 
+*/ 
+#include <iostream>
+#include <cstring>
+using namespace std;
+char Left[3][7];//天平左边硬币
+char Right[3][7];//天平右边硬币
+char Result[3][7];//结果
+bool IsFake(char c,bool light);//light 为真表示假硬币为轻，反之为重
+int main()
+{
+	int t;
+	cin>>t;
+	while(t--)
+	{
+		for(int i=0;i<3;++i) cin>>Left[i]>>Right[i]>>Result[i];
+		for(char c='A';c<='L';c++){
+			if(IsFake(c,true))
+			{
+				cout<<c<<"is the counterfeit cion and it is light.\n";
+				break;
+			}
+			else if(IsFake(c,false)){
+				cout<<c<<"is the counterfeit cion and it is heavy.\n";
+				break;
+			}
+		}
+	}
+	return 0;
+} 
+bool IsFake(char c,bool light)
+{
+	for(int i=0;i<3;++i)
+	{
+		char *pLeft,*pRight;
+		if(light){
+			pLeft=Left[i];
+			pRight=Right[i];
+		}
+		else{
+		pLeft=Right[i];
+		pRight=Left[i];
+	    }
+	    switch(Result[i][0])//天平右边的情况 
+	    {
+		case 'u':
+			if(strchr(pRight,c)==NULL)
+			return false;
+			break;
+		case 'e':
+			if(strchr(pLeft,c)||strchr(pRight,c))
+			return false;
+			break;
+		case 'd':
+			if(strchr(pLeft,c)==NULL)
+			return false;
+			break;
+	    }
+	}
+	
+}
