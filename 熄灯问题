@@ -28,23 +28,23 @@ char oriLights[5];
 char lights[5];
 char result[5];
 
-int GetBit(char c,int i)
+int GetBit(char c,int i)//得到c的第i位
 {
 	return (c>>i)&1;
 }
 void SetBit(char &c,int i,int v)
 {
 	if(v){
-		c|=(1<<i);
+		c|=(1<<i);//c的第i位置为1
 	}
 	else
-	    c&=~(1<<i);
+	    c&=~(1<<i);//c的第i位置为0
 }
-void FlipBit(char & c,int i)
+void FlipBit(char & c,int i)//反转c的第i位
 {
 	c^=(1<<i);
 }
-void OutputResult(int t,char result[])
+void OutputResult(int t,char result[])//输出结果
 {
 	cout<<"PUZZLE #"<<t<<endl;
 	for(int i=0;i<5;++i){
@@ -59,7 +59,7 @@ void OutputResult(int t,char result[])
 int main()
 {
 	int T;
-	cin>>T;
+	cin>>T;//读入测试组数
 	for(int t=1;t<=T;++t){
 		for(int i=0;i<5;++i){
 			for (int j=0;j<6;++j){
@@ -68,15 +68,16 @@ int main()
 				SetBit(oriLights[i],j,s);	
 			}
 		}
+		//枚举枚举第一行开关的状态组合2^6  (0~63)
 		for(int n=0;n<64;++n){
 			int switchs=n;
-			memcpy(lights,oriLights,sizeof(oriLights));
+			memcpy(lights,oriLights,sizeof(oriLights));//复制
 			for(int i=0;i<5;++i){
 				result[i]=switchs;
 				for(int j=0;j<6;j++){
 				   if(GetBit(switchs,j)){
 				   	if(j>0)
-				   	    FlipBit(lights[i],j);
+				   	    FlipBit(lights[i],j-1);
 				   	FlipBit(lights[i],j);
 				   	if(j<5)
 				   		FlipBit(lights[i],j+1); 
