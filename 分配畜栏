@@ -1,0 +1,69 @@
+/*
+Stall Reservation 分配畜栏
+题目描述： n头奶牛要挤奶（1<=n<=50000) 每头牛的挤奶时间区间为[A,B](1<=1000000,A,B为整数）
+	牛要待在畜栏里才可以挤奶，一个畜栏同一时间只能容纳一头牛。
+	问至少要多少个畜栏才能完成全部的挤奶工作
+	去同一个畜栏的两头牛，他们挤奶时间区间哪怕只在端点重合也是不可以的
+算法描述：贪心算法
+	1.把所有奶牛按照开始时间从小到大排序
+	2.为第一头奶牛分配一个畜栏
+	3.依次处理后面的每头奶牛i,处理i时，考虑已分配的畜栏中结束时间最早的畜栏x
+		if E(x)<S(i) 则不用分配新畜栏，i可进入x,并修改E(x)为E(i)
+		if E(x)>=S(i) 则重新分配新的畜栏y,记E(y)=E(i)
+	直到所有奶牛处理结束
+	需要用优先队列存放已经分配的畜栏，并使得结束时间最早的畜栏始终位于队列的头部
+
+*/
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <vector>
+using namespace std;
+struct Cow {
+	int a, b;//挤奶区间的起始终点
+	int No;//编号
+	bool operator<(const Cow& c) const { return a < c.a; }//挤奶时间越早，排序时放在越前面
+}cows[50100];
+int pos[50100];//pos[i]表示编号为i的奶牛去的畜栏编号
+struct Stall {
+	int end;//结束时间
+	int No;//编号
+	bool operator<(const Stall& s) const { return end > s.end; }//结束时间越早，优先级越高（优先队列默认大端排序）
+	Stall(int e,int n): end(e),No(n){}
+};
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	for (int i = 0; i < n; ++i) {
+		scanf("%d%d", &cows[i].a, &cows[i].b);
+		cows[i].No = i;
+	}
+	sort(cows, cows + n);//自定义升序排列
+	int total = 0;
+	priority_queue<Stall> pq;//优先队列
+	for (int i = 0; i < n; ++i) {
+		if (pq.empty()) {//为第一头奶牛分配畜栏
+			++total;
+			pq.push(Stall(cows[i].b, total));
+			pos[cows[i].No] = total;
+		}
+		else {
+			Stall st = pq.top();
+			if (st.end < cows[i].a) {//端点也不能重合
+				pq.pop();
+				pos[cows[i].No] = st.No;
+				pq.push(Stall(cows[i].b, st.No));
+			}
+			else {
+				++total;
+				pq.push(Stall{ cows[i].b,total });
+				pos[cows[i].No] = total;
+			}
+		}
+	}
+	printf("%d\n", total);
+	for (int i = 0; i < n; ++i)
+		printf("%d\n", pos[i]);
+	return 0;
+}
