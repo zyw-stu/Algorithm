@@ -1,0 +1,32 @@
+#include <iostream>
+#include <cstdio>
+#include <string>
+#include <vector>
+using namespace std;
+long long myMod(long long x,long long m)
+{
+    long long res=x%m;
+    if(res<0) res+=m;
+    return m;
+}
+int main()
+{
+    long long  n,c;
+    cin>>n>>c;
+    vector<long long> p(n+1);
+    p[0]=1;
+    long long num,f;
+    cin>>num;
+    f=num;
+    int i;
+    for(i=1;i<=n;i++)
+    {
+        p[i]=c*p[i-1];
+        cin>>num;
+        f+=num*p[i];
+    }
+    long long mod;
+    long long m=114514;
+    mod=myMod(f,m);
+    cout<<m<<endl;
+}
