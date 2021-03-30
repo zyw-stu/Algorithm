@@ -1,0 +1,70 @@
+#include <cstdio> 
+#include <iostream>
+#include <string>
+#include <vector> 
+#include <algorithm>
+#include <cctype>
+#include <cstring>
+using namespace std;
+typedef struct dic {
+	string s;
+	int fre;
+	bool operator < (const dic& d) const {
+		if (d.fre != fre)
+			return d.fre < fre;
+		else
+			return s < d.s;
+	}
+}dic, * Pd;
+
+int main()
+{
+	char s[1000];
+	vector<dic> v;
+	while (cin >> s)
+	{
+		char seps[] = " ,./?:;\\/<>'|[]{}+=-_()*&^%$#@!~\"";
+		char* token = NULL;
+		char* ptr = NULL;
+		token = strtok_s(s, seps, &ptr);//相较于strtok()函数，strtok_s函数需要用户传入一个指针，用于函数内部判断从哪里开始处理字符串
+		while (token != NULL) {
+			string str;
+			str = token;
+			dic d; d.s = str; d.fre = 1;
+			v.push_back(d);
+			//cout << str<< endl;
+			token = strtok_s(NULL, seps, &ptr);//其他的使用与strtok()函数相同
+		}
+	}
+	
+
+	//得到了已经分割处理后的容器V
+		vector<dic> od;//存放去重后的数据 
+		vector<dic>::iterator it; vector<dic>::iterator p;
+		for (it = v.begin(); it != v.end(); it++)
+		{
+			if (it->fre == 0) continue;
+			else {
+				for (p = it + 1; p != v.end(); p++)
+				{
+					if (p->fre != 0)
+					{
+						if (p->s == it->s)
+						{
+							p->fre = 0;
+							it->fre++;
+						}
+					}
+				}
+				od.push_back(*it);
+			}
+
+		}
+		sort(od.begin(), od.end());
+		vector<dic>::iterator IT;
+		for (IT = od.begin(); IT != od.end(); IT++)
+		{
+			cout << IT->s << endl;
+		}
+	return 0;
+}
