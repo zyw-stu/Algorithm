@@ -9,37 +9,51 @@ using namespace std;
 typedef struct dic {
 	string s;
 	int fre;
-	bool operator < (const dic& d) const {
+	bool operator < (const dic&d) const {
 		if (d.fre != fre)
 			return d.fre < fre;
 		else
-			return s < d.s;
+			return s<d.s;
 	}
 }dic, * Pd;
-
 int main()
 {
-	char s[1000];
-	vector<dic> v;
-	while (cin >> s)
+	char s[10000];
+	string line;
+	vector<dic> v;//存放分割后的原始数据 
+	while (getline(cin,line))
 	{
-		char seps[] = " ,./?:;\\/<>'|[]{}+=-_()*&^%$#@!~\"";
-		char* token = NULL;
-		char* ptr = NULL;
-		token = strtok_s(s, seps, &ptr);//相较于strtok()函数，strtok_s函数需要用户传入一个指针，用于函数内部判断从哪里开始处理字符串
-		while (token != NULL) {
-			string str;
-			str = token;
-			dic d; d.s = str; d.fre = 1;
-			v.push_back(d);
-			//cout << str<< endl;
-			token = strtok_s(NULL, seps, &ptr);//其他的使用与strtok()函数相同
+		if(line.empty()) break;
+		int i;
+		for(i=0;i<line.size()-1;i++)
+		{
+		    	if(line[i]=='\''&&line[i+1]=='s')
+		    	{
+		    		line[i]=' ';
+					line[i+1]=' ';
+				}
+				if(line[i]=='s'&&line[i+1]=='\'')
+				{
+					line[i]=' ';
+					line[i+1]=' ';
+				}	
 		}
-	}
-	
-
-	//得到了已经分割处理后的容器V
-		vector<dic> od;//存放去重后的数据 
+		strcpy(s,line.c_str());
+		char c[] = " ,./?:;\\/<>'|[]{}+=-_()*&^%$#@!~	‘’“”；\"";
+		
+		char* r = strtok(s, c);
+		while (r != NULL) {
+			string str;
+			dic d;
+			str = r;
+			transform(str.begin(), str.end(), str.begin(), ::tolower);//转换为小写字母 
+		
+			d.s=str;	d.fre=1;
+			v.push_back(d);		
+			r = strtok(NULL, c);
+		}
+	}//得到了已经分割处理后的容器V
+	vector<dic> od;//存放去重后的数据 
 		vector<dic>::iterator it; vector<dic>::iterator p;
 		for (it = v.begin(); it != v.end(); it++)
 		{
@@ -58,7 +72,6 @@ int main()
 				}
 				od.push_back(*it);
 			}
-
 		}
 		sort(od.begin(), od.end());
 		vector<dic>::iterator IT;
